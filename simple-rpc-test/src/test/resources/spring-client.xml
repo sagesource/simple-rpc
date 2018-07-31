@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 注册 HelloWorldService 服务客户端 -->
+    <bean id="helloWorldService" class="org.sagesource.simplerpc.spring.client.ServiceClientFactoryBean"
+          destroy-method="close">
+        <property name="interfaceType" value="org.sagesource.test.api.HelloWorldService.Iface"/>
+        <property name="serviceVersion" value="1.0.0"/>
+        <property name="protocolPoolConfig">
+            <bean class="org.sagesource.simplerpc.basic.entity.ProtocolPoolConfig">
+                <property name="maxIdle" value="50"/>
+                <property name="minIdle" value="1"/>
+                <property name="maxTotal" value="50"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 注册 JobService 服务客户端 -->
+    <bean id="jobService" class="org.sagesource.simplerpc.spring.client.ServiceClientFactoryBean"
+          destroy-method="close">
+        <property name="interfaceType" value="org.sagesource.test.api.JobService.Iface"/>
+        <property name="serviceVersion" value="1.0.0"/>
+        <property name="protocolPoolConfig">
+            <bean class="org.sagesource.simplerpc.basic.entity.ProtocolPoolConfig">
+                <property name="maxIdle" value="50"/>
+                <property name="minIdle" value="1"/>
+                <property name="maxTotal" value="50"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>

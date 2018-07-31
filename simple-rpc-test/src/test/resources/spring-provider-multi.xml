@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="org.sagesource.test.api.impl"/>
+
+    <!-- 多路复用 Service Provider -->
+    <bean id="serviceProvider" class="org.sagesource.simplerpc.spring.provider.MultiplexedServiceProviderFactoryBean"
+          destroy-method="close">
+        <property name="port" value="8999"/>
+        <property name="configList">
+            <list>
+                <!--<bean class="org.sagesource.simplerpc.spring.provider.dto.MultiplexedServiceConfig">
+                    <property name="weight" value="1"/>
+                    <property name="serviceRef" ref="helloWorldService"/>
+                    <property name="version" value="1.0.0"/>
+                </bean>-->
+                <bean class="org.sagesource.simplerpc.spring.provider.dto.MultiplexedServiceConfig">
+                    <property name="weight" value="1"/>
+                    <property name="serviceRef" ref="jobService"/>
+                    <property name="version" value="1.0.0"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Trace 调用链模拟 -->
+    <!-- 注册 HelloWorldService 服务客户端 -->
+    <bean id="helloWorldServiceClient" class="org.sagesource.simplerpc.spring.client.ServiceClientFactoryBean"
+          destroy-method="close">
+        <property name="interfaceType" value="org.sagesource.test.api.HelloWorldService.Iface"/>
+        <property name="serviceVersion" value="1.0.0"/>
+        <property name="protocolPoolConfig">
+            <bean class="org.sagesource.simplerpc.basic.entity.ProtocolPoolConfig">
+                <property name="maxIdle" value="50"/>
+                <property name="minIdle" value="1"/>
+                <property name="maxTotal" value="50"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
